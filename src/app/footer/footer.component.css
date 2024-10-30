@@ -1,0 +1,110 @@
+/* Footer overall styling */
+footer {
+    background-color: #1a1a1a; /* Dark background */
+    color: white;
+    padding: 50px 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Footer container grid */
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  /* Footer columns */
+  .footer-column {
+    flex: 1;
+    min-width: 250px;
+    margin-bottom: 30px;
+  }
+  
+  /* Brand section */
+  .footer-brand {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #fbbf24; /* Yellow brand color */
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-brand:hover {
+    color: #fbbf24; /* Hover stays yellow for consistency */
+  }
+  
+  .footer-description {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #bbbbbb;
+  }
+  
+  .footer-copyright {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #888888;
+  }
+  
+  /* Quick links section */
+  .footer-heading {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fbbf24;
+    margin-bottom: 10px;
+  }
+  
+  .footer-links {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .footer-link {
+    color: #bbbbbb;
+    text-decoration: none;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    display: block;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-link:hover {
+    color: #fbbf24;
+    text-decoration: underline;
+  }
+  
+  /* Social media section */
+  .social-icons {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .social-icon {
+    font-size: 1.5rem;
+    color: #bbbbbb;
+    transition: color 0.3s ease;
+  }
+  
+  .social-icon:hover {
+    color: #fbbf24;
+  }
+  
+  .footer-social-text {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #888888;
+  }
+  
+  /* Responsive styling */
+  @media (max-width: 768px) {
+    .footer-container {
+      flex-direction: column;
+    }
+  
+    .footer-column {
+      margin-bottom: 20px;
+    }
+  }
+  

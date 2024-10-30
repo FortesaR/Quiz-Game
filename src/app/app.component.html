@@ -1,0 +1,53 @@
+<app-header/>
+
+<style>
+    #app {
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 10%;
+    }
+
+    .spritePosition {
+        margin: 10px 0 0 10px;
+        font-size: 0.8em;
+    }
+
+    .button {
+        width: 140px;
+        margin: 10px;
+        padding: 10px;
+        background-color: #000000;
+        color: rgba(255, 255, 255, 0.87);
+        border: 1px solid rgba(255, 255, 255, 0.87);
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &:hover {
+            border: 1px solid #0ec3c9;
+            color: #0ec3c9;
+        }
+
+        &:active {
+            background-color: #0ec3c9;
+        }
+
+        /* Disabled styles */
+        &:disabled {
+            cursor: not-allowed;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.3);
+        }
+    }
+</style>
+
+<main id="app">
+    <phaser-game />
+    <div>
+        
+    </div>
+</main>
+<app-footer/>

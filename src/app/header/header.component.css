@@ -1,0 +1,143 @@
+/* Header Styling */
+header {
+  background-color: #1a1a1a; /* Dark background for the header */
+  color: white;
+  padding: 50px;
+  position: relative;
+  z-index: 10;
+}
+
+/* Header Container */
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Logo Section */
+.header-logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fbbf24; /* Yellow logo color */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.header-logo:hover {
+  color: #fbbf24;
+}
+
+/* Navigation Links */
+.header-nav {
+  display: flex;
+}
+
+.header-nav-list {
+  display: flex;
+  gap: 20px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header-nav-item {
+  color: #bbbbbb;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.header-nav-item:hover {
+  color: #fbbf24;
+}
+
+/* Action Buttons */
+.header-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.header-action-btn {
+  color: #bbbbbb;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 8px 16px;
+  border: 1px solid #bbbbbb;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.header-action-btn:hover {
+  background-color: #fbbf24;
+  color: #1a1a1a;
+  border-color: #fbbf24;
+}
+
+.signup {
+  background-color: #fbbf24;
+  color: #1a1a1a;
+  border-color: #fbbf24;
+}
+
+.signup:hover {
+  background-color: #fbbf24;
+  color: white;
+}
+
+/* Mobile Menu Icon */
+.mobile-menu-icon {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.mobile-menu-icon i {
+  color: #fbbf24;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #1a1a1a;
+  padding: 20px;
+}
+
+.mobile-menu-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.mobile-menu-item {
+  color: #bbbbbb;
+  text-decoration: none;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.mobile-menu-item:hover {
+  color: #fbbf24;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .header-nav {
+    display: none;
+  }
+
+  .mobile-menu-icon {
+    display: block;
+  }
+
+  .mobile-menu-overlay.show {
+    display: block;
+  }
+}
