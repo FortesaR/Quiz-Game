@@ -1,4 +1,4 @@
-// LevelManager.ts
+
 import { Scene } from 'phaser';
 
 export type Level = 'Easy' | 'Hard';
