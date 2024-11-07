@@ -10,7 +10,6 @@ This template has been updated for:
 - [Angular 17.2.0](https://github.com/angular)
 - [TypeScript 5.3.2](https://github.com/microsoft/TypeScript)
 
-![screenshot](screenshot.png)
 
 ## Requirements
 
