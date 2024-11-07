@@ -1,6 +1,5 @@
 import { GameObjects, Scene } from 'phaser';
 import { EventBus } from '../EventBus';
-import { LevelManager, Level } from './LevelManager';
 
 export class Category extends Scene {
     categories: string[];
@@ -25,6 +24,7 @@ export class Category extends Scene {
 
         this.add.image(0, 0, 'backgroundImage').setOrigin(0, 0).setDisplaySize(width, height);
 
+     
         this.titleText = this.add.text(width / 2, height / 4, 'Choose Category', {
             fontFamily: 'Arial Black',
             fontSize: 48,
@@ -33,6 +33,7 @@ export class Category extends Scene {
             strokeThickness: 4,
         }).setOrigin(0.5);
 
+       
         const buttonHeight = 40;
         const spacing = 20;
         const totalButtonHeight = this.categories.length * buttonHeight + (this.categories.length - 1) * spacing;
@@ -65,14 +66,17 @@ export class Category extends Scene {
         EventBus.emit('current-scene-ready', this);
     }
 
+    
     selectCategory(category: string) {
         console.log(`Selected category: ${category}`);
         this.selectedCategory = category;
 
+        
         this.titleText?.destroy();
         this.categoryButtons.forEach(button => button.destroy());
         this.backButton?.destroy(); 
 
+        
         this.showLevelSelection();
     }
 
@@ -98,7 +102,7 @@ export class Category extends Scene {
             })
             .setOrigin(0.5)
             .setInteractive()
-            .on('pointerdown', () => this.startSceneWithLevel(level as Level))
+            .on('pointerdown', () => this.startQuizScene(level))
             .on('pointerover', () => button.setStyle({ fill: '#ff0' }))
             .on('pointerout', () => button.setStyle({ fill: '#fff' }));
 
@@ -113,22 +117,17 @@ export class Category extends Scene {
             .setScale(1.5); 
     }
 
+    
     goBack() {
         console.log('Going back to the previous scene');
         this.scene.start('MainMenu'); 
     }
 
-    startSceneWithLevel(level: Level) {
+
+    startQuizScene(level: string) {
         if (this.selectedCategory) {
             console.log(`Starting ${this.selectedCategory} with ${level} level`);
-            this.changeScene(this.selectedCategory, level);
+            this.scene.start(this.selectedCategory, { level });
         }
-    }
-
-    changeScene(sceneName: string, level: Level) {
-        this.cameras.main.fadeOut(1000, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => {
-            this.scene.start(sceneName, { level }); 
-        });
     }
 }

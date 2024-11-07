@@ -23,7 +23,7 @@ export class MainMenu extends Scene {
         this.load.image('backgroundImage', '../../assets/Quiz.png');
         this.load.audio('backgroundMusic', '../../assets/8bit-music-for-game-68698.mp3');
         this.load.image('muteButton', '../../assets/icons8-mute-48.png');
-        this.load.image('logo', '../../assets/logo.png'); 
+        this.load.image('logo', '../../assets/logo12.png'); 
     }
 
     create() {
@@ -40,25 +40,25 @@ export class MainMenu extends Scene {
 
         this.logoTween = this.tweens.add({
             targets: this.logo,
-            y: { value: height / 3 + 20, duration: 2000, ease: 'Sine.easeInOut' }, // Float down
+            y: { value: height / 3 + 20, duration: 2000, ease: 'Sine.easeInOut' }, 
             yoyo: true,
             repeat: -1
         });
 
        
         this.playButton = this.add.text(width / 2, height / 2, 'Play', {
-            fontFamily: 'Arial Black',
-            fontSize: 48,
+            fontFamily: 'Comic Sans MS',
+            fontSize: 38,
             color: '#ffffff',
             stroke: '#000000',
-            strokeThickness: 6,
+            strokeThickness: 4,
             align: 'center'
         })
         .setOrigin(0.5)
         .setDepth(100)
         .setInteractive()
         .on('pointerdown', () => this.changeScene())
-        .on('pointerover', () => this.playButton.setStyle({ fill: '#ff0' }))
+        .on('pointerover', () => this.playButton.setStyle({ fill: ' #87CEEB' }))
         .on('pointerout', () => this.playButton.setStyle({ fill: '#fff' }));
 
         this.playButtonTween = this.tweens.add({

@@ -1,7 +1,6 @@
 import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
 import { GeographyQuestions, GeographyQuestionsHard } from '../../question';
-import { LevelManager, Level } from '../scenes/LevelManager';
 
 interface Question {
     question: string;
@@ -12,38 +11,37 @@ interface Question {
 export class Geography extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
-    questionText: Phaser.GameObjects.Text | null = null;
+    questionText: Phaser.GameObjects.Text | null;
     answerButtons: Phaser.GameObjects.Rectangle[] = [];
     questions: Question[] = [];
     currentQuestionIndex: number = 0;
-    score: number = 0;
-    scoreText: Phaser.GameObjects.Text | null = null;
-    winningSound: Phaser.Sound.BaseSound | null = null;
-    levelManager: LevelManager;
-    level: Level;
+    score: number = 0; 
+    scoreText: Phaser.GameObjects.Text | null; 
+    winningSound: Phaser.Sound.BaseSound | null = null; 
+    timerText: Phaser.GameObjects.Text | null;
+    timer: number = 30; 
+    timerEvent: Phaser.Time.TimerEvent | null = null;
 
-    constructor(level: Level = 'Easy') {
+    constructor() {
         super('Geography');
-        this.level = level;
-        this.levelManager = new LevelManager(this, level);
     }
 
     preload() {
         this.load.image('backgroundPic', '../../assets/blackboard1.png');
-        this.load.audio('winningSound', ['../../assets/winner-bell-game-show-91932.mp3']);
+        this.load.audio('winningSound', ['../../assets/winner-bell-game-show-91932.mp3',]);
         this.load.audio('loseSound', ['../../assets/marimba-lose-250960.mp3']);
+        this.load.image('pause', '../../assets/icons8-mute-48.png');
     }
 
-    create() {
+    create(data: { level: string }) {
         this.camera = this.cameras.main;
+
         const centerX = this.camera.width / 2;
         const centerY = this.camera.height / 2;
 
         this.background = this.add.image(centerX, centerY, 'backgroundPic');
-        this.background.setDisplaySize(this.camera.width, this.camera.height);
+        this.background.setDisplaySize(this.camera.width, this.camera.height); 
 
-        console.log(`Initializing Geography scene with level: ${this.level}`);
-        
         this.resetGame();
 
         this.scoreText = this.add.text(16, 16, `Score: ${this.score}`, {
@@ -52,9 +50,12 @@ export class Geography extends Scene {
             color: '#ffffff',
         });
 
-        
-        this.questions = this.level === 'Hard' ? GeographyQuestionsHard : GeographyQuestions;
-        console.log(`Loaded questions: ${this.questions.length} for level: ${this.level}`);
+        if (data.level === 'Hard') {
+            this.questions = GeographyQuestionsHard;
+            this.startTimer(); 
+        } else {
+            this.questions = GeographyQuestions; // Easy questions
+        }
 
         this.showQuestion();
         EventBus.emit('current-scene-ready', this);
@@ -62,7 +63,42 @@ export class Geography extends Scene {
 
     resetGame() {
         this.currentQuestionIndex = 0;
-        this.score = 0;
+        this.score = 0; 
+        this.timer = 30; 
+    }
+
+    startTimer() {
+       
+        this.timerText = this.add.text(this.camera.width - 200, 16, `Time: ${this.timer}`, {
+            fontFamily: 'Arial Black',
+            fontSize: 32,
+            color: '#ffffff',
+        });
+
+        
+        this.timerEvent = this.time.addEvent({
+            delay: 1000, 
+            callback: () => {
+                this.timer--;
+                this.timerText?.setText(`Time: ${this.timer}`);
+                if (this.timer <= 0) {
+                    this.timerExpired(); 
+                }
+            },
+            loop: true
+        });
+    }
+
+    timerExpired() {
+        console.log('Time expired!');
+        this.timerEvent?.remove(); 
+        this.currentQuestionIndex++; 
+        if (this.currentQuestionIndex < this.questions.length) {
+            this.showQuestion(); 
+        } else {
+            console.log('Quiz finished!');
+            this.scene.start('GameOver', { finalScore: this.score });
+        }
     }
 
     cleanBoardAnimation(onComplete: () => void) {
@@ -82,7 +118,7 @@ export class Geography extends Scene {
             onComplete();
         }
     }
-
+    
     showQuestion() {
         const centerX = this.camera.width / 2;
         const centerY = this.camera.height / 2;
@@ -90,14 +126,12 @@ export class Geography extends Scene {
         this.cleanBoardAnimation(() => {
             if (this.questionText) {
                 this.questionText.destroy();
-                this.questionText = null;
+                this.questionText = null; 
             }
 
             this.answerButtons.forEach(button => button.destroy());
-            this.answerButtons = [];
-
+            this.answerButtons = []; 
             const currentQuestion = this.questions[this.currentQuestionIndex];
-            console.log(`Showing question: ${currentQuestion.question}`);
 
             const questionCard = this.add.rectangle(centerX, centerY - 100, 700, 200, 0x004d00)
                 .setOrigin(0.5)
@@ -105,7 +139,7 @@ export class Geography extends Scene {
 
             this.questionText = this.add.text(centerX, centerY - 100, currentQuestion.question, {
                 fontFamily: 'Arial Black',
-                fontSize: 32,
+                fontSize: 28,
                 color: '#ffffff',
                 align: 'center'
             }).setOrigin(0.5).setAlpha(0).setScale(1);
@@ -145,12 +179,23 @@ export class Geography extends Scene {
                 this.answerButtons.push(answerButton);
             });
 
-          
-            if (this.level === 'Hard') {
-                console.log('Starting timer for Hard level question');
-                this.levelManager.resetTimer();
-            }
+           
+            this.resetTimer();
         });
+    }
+
+    resetTimer() {
+        this.timer = 30; 
+        this.timerText?.setText(`Time: ${this.timer}`);
+        this.timerEvent?.reset({ delay: 1000, callback: this.onTimerTick, callbackScope: this, loop: true }); // Reset and restart the timer event
+    }
+
+    onTimerTick() {
+        this.timer--;
+        this.timerText?.setText(`Time: ${this.timer}`);
+        if (this.timer <= 0) {
+            this.timerExpired(); // Automatically move to the next question when time expires
+        }
     }
 
     checkAnswer(selectedIndex: number) {
@@ -162,7 +207,17 @@ export class Geography extends Scene {
             selectedButton.setFillStyle(0x00ff00);
             this.sound.play('winningSound');
 
-            this.score += 10;
+           
+            let points = 10; // Default score
+            if (this.timer < 10) {
+                points = 4; // Less than 10 seconds
+            } else if (this.timer < 15) {
+                points = 6; // Between 10 and 14 seconds
+            } else if (this.timer < 20) {
+                points = 8; // Between 15 and 19 seconds
+            }
+
+            this.score += points;
             this.scoreText?.setText(`Score: ${this.score}`);
         } else {
             console.log('Wrong!');
@@ -185,8 +240,13 @@ export class Geography extends Scene {
                 this.showQuestion();
             } else {
                 console.log('Quiz finished!');
+                this.timerEvent?.remove(); 
                 this.scene.start('GameOver', { finalScore: this.score });
             }
         });
+    }
+
+    changeScene() {
+        this.scene.start('GameOver', { finalScore: this.score });
     }
 }
